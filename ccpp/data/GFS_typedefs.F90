@@ -3359,7 +3359,7 @@ module GFS_typedefs
     logical              :: bl_mynn_tkebudget = .false.
     logical              :: bl_mynn_tkeadvect = .false.
     integer              :: bl_mynn_cloudpdf  = 2
-    integer              :: bl_mynn_mixlength = 2
+    integer              :: bl_mynn_mixlength = 1
     integer              :: bl_mynn_edmf      = 1
     integer              :: bl_mynn_edmf_mom  = 1
     integer              :: bl_mynn_edmf_tke  = 0
