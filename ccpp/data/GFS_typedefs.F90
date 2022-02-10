@@ -6649,7 +6649,7 @@ module GFS_typedefs
         allocate (Diag%det_thl   (IM,Model%levs))
         allocate (Diag%det_sqv   (IM,Model%levs))
       endif
-      if (Model%bl_mynn_tkebudget .eq. .true.) then
+      if (Model%bl_mynn_tkebudget .eqv. .true.) then
         allocate (Diag%dqke      (IM,Model%levs))
         allocate (Diag%qwt       (IM,Model%levs))
         allocate (Diag%qshear    (IM,Model%levs))
@@ -6673,7 +6673,7 @@ module GFS_typedefs
         Diag%det_thl       = clear_val
         Diag%det_sqv       = clear_val
       endif
-      if (Model%bl_mynn_tkebudget .eq. .true.) then
+      if (Model%bl_mynn_tkebudget .eqv. .true.) then
         Diag%dqke          = clear_val
         Diag%qwt           = clear_val
         Diag%qshear        = clear_val
