@@ -126,9 +126,13 @@ module GFS_restart
     if(Model%lrefres) then
        Restart%num3d = Model%ntot3d+1
     endif
+    ! General Convection
+    if (Model%imfdeepcnv .ge. 0 .or Model%imfshalcnv .ge. 0) then
+      Restart%num3d = Restart%num3d + 1
+    endif
     ! GF
     if (Model%imfdeepcnv == 3) then
-      Restart%num3d = Restart%num3d + 4
+      Restart%num3d = Restart%num3d + 3
     endif
     ! MYNN PBL 
     if (Model%do_mynnedmf) then
@@ -336,11 +340,19 @@ module GFS_restart
         Restart%data(nb,num)%var3p => IntDiag(nb)%refl_10cm(:,:)
       enddo
     endif
-
     if (Model%lrefres) then
        num = Model%ntot3d+1
     else
        num = Model%ntot3d
+    endif
+
+    !--Convection variable used in CB cloud fraction                                                                    
+    if (Model%imfdeepcnv .ge. 0 .or. Model%imfshalcnv .ge. 0) then
+      num = num + 1
+      Restart%name3d(num) = 'cnv_3d_ud_mf'
+      do nb = 1,nblks
+        Restart%data(nb,num)%var3p => Tbd(nb)%ud_mf(:,:)
+      enddo
     endif
     !--- RAP/HRRR-specific variables, 3D
     ! GF
@@ -359,11 +371,6 @@ module GFS_restart
       Restart%name3d(num) = 'gf_3d_qci_conv'
       do nb = 1,nblks
         Restart%data(nb,num)%var3p => Coupling(nb)%qci_conv(:,:)
-      enddo
-      num = num + 1
-      Restart%name3d(num) = 'gf_3d_ud_md'
-      do nb = 1,nblks
-        Restart%data(nb,num)%var3p => Tbd(nb)%ud_mf(:,:)
       enddo
     endif
     ! MYNN PBL
