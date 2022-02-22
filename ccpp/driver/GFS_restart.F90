@@ -360,6 +360,11 @@ module GFS_restart
       do nb = 1,nblks
         Restart%data(nb,num)%var3p => Coupling(nb)%qci_conv(:,:)
       enddo
+      num = num + 1
+      Restart%name3d(num) = 'gf_3d_ud_md'
+      do nb = 1,nblks
+        Restart%data(nb,num)%var3p => Tbd(nb)%ud_mf(:,:)
+      enddo
     endif
     ! MYNN PBL
     if (Model%do_mynnedmf) then
