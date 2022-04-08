@@ -718,7 +718,7 @@ module FV3GFS_io_mod
       !--- register the 3D fields
       do num = 1,nvar_dust12m
         var3_p2 => dust12m_var(:,:,:,num)
-        call register_restart_field(dust12m_restart, dust12m_name(num), var3_p2, dimensions=(/'time', 'lat', 'lon'/),&
+        call register_restart_field(dust12m_restart, dust12m_name(num), var3_p2, dimensions=(/'time', 'lat ', 'lon '/),&
                                   &is_optional=.not.mand)
       enddo
       nullify(var3_p2)
@@ -808,7 +808,7 @@ module FV3GFS_io_mod
       mand = .false.
       do num = 1,nvar_gbbepx
        var3_p2 => gbbepx_var(:,:,:,num)
-       call register_restart_field(gbbepx_restart, gbbepx_name(num), var3_p2, dimensions=(/'t', 'lat', 'lon'/),&
+       call register_restart_field(gbbepx_restart, gbbepx_name(num), var3_p2, dimensions=(/'t  ', 'lat', 'lon'/),&
                                   &is_optional=.not.mand)
       enddo
       nullify(var3_p2)
