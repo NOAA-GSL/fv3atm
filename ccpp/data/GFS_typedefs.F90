@@ -1282,6 +1282,8 @@ module GFS_typedefs
     integer              :: ntia            !< tracer index for ice friendly aerosol
     integer              :: ntsmoke         !< tracer index for smoke
     integer              :: ntdust          !< tracer index for dust
+    integer              :: nchem           !< number of prognostic chemical species (vertically mixied)
+    integer              :: ndvel           !< number of prognostic chemical species (which are deposited, usually =nchem)
     integer              :: ntchm           !< number of prognostic chemical tracers (advected)
     integer              :: ntchs           !< tracer index for first prognostic chemical tracer
     integer              :: ntche           !< tracer index for last prognostic chemical tracer
@@ -5606,12 +5608,19 @@ module GFS_typedefs
     integer :: n
 
     !--- begin
+    Model%nchem = 0
+    Model%ndvel = 0
     Model%ntchm = 0
     Model%ntchs = NO_TRACER
     Model%ntche = NO_TRACER
     Model%ndchm = 0
     Model%ndchs = NO_TRACER
     Model%ndche = NO_TRACER
+
+    if (Model%rrfs_smoke) then
+      Model%nchem = 2
+      Model%ndvel = 2
+    endif
 
     do n = 1, size(tracer_types)
       select case (tracer_types(n))
@@ -6114,6 +6123,8 @@ module GFS_typedefs
       print *, ' ntia              : ', Model%ntia
       print *, ' ntsmoke           : ', Model%ntsmoke
       print *, ' ntdust            : ', Model%ntdust
+      print *, ' nchem             : ', Model%nchem
+      print *, ' ndvel             : ', Model%ndvel
       print *, ' ntchm             : ', Model%ntchm
       print *, ' ntchs             : ', Model%ntchs
       print *, ' ntche             : ', Model%ntche

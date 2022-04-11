@@ -5175,6 +5175,18 @@
   units = index
   dimensions = ()
   type = integer
+[nchem]
+  standard_name = number_of_chemical_species_vertically_mixed
+  long_name = number of chemical vertically mixed
+  units = count
+  dimensions = ()
+  type = integer
+[ndvel]
+  standard_name = number_of_chemical_species_deposited
+  long_name = number of chemical pbl deposited
+  units = count
+  dimensions = ()
+  type = integer
 [ntchm]
   standard_name = number_of_chemical_tracers
   long_name = number of chemical tracers
