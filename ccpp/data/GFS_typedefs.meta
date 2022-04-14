@@ -641,6 +641,7 @@
   dimensions = (horizontal_dimension,12,5)
   type = real
   kind = kind_phys
+  active = (flag_for_rrfs_smoke_coupling)
 [emi_in]
   standard_name = anthropogenic_background_input
   long_name = anthropogenic background input
@@ -648,6 +649,7 @@
   dimensions = (horizontal_dimension,1)
   type = real
   kind = kind_phys
+  active = (flag_for_rrfs_smoke_coupling)
 [smoke_GBBEPx]
   standard_name = emission_smoke_GBBEPx
   long_name = emission fire GBBEPx
@@ -655,6 +657,7 @@
   dimensions = (horizontal_dimension,24,3)
   type = real
   kind = kind_phys
+  active = (flag_for_rrfs_smoke_coupling)
 [z0base]
   standard_name = baseline_surface_roughness_length
   long_name = baseline surface roughness length for momentum in meter
@@ -2334,6 +2337,7 @@
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
   type = real
   kind = kind_phys
+  active = (flag_for_rrfs_smoke_coupling)
 [nwfa2d]
   standard_name = tendency_of_hygroscopic_aerosols_at_surface_adjacent_layer
   long_name = instantaneous water-friendly sfc aerosol source
@@ -2357,6 +2361,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
+  active = (flag_for_rrfs_smoke_coupling)
 [emseas]
   standard_name = emission_of_seas_for_smoke
   long_name = emission of seas for smoke
@@ -2364,6 +2369,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
+  active = (flag_for_rrfs_smoke_coupling)
 [emanoc]
   standard_name = emission_of_anoc_for_thompson_mp
   long_name = emission of anoc for thompson mp
@@ -2371,6 +2377,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
+  active = (flag_for_rrfs_smoke_coupling)
 [ebb_smoke_hr]
   standard_name = surfce_emission_of_smoke
   long_name = emission of surface smoke
@@ -2378,6 +2385,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
+  active = (flag_for_rrfs_smoke_coupling)
 [frp_hr]
   standard_name = frp_hourly
   long_name = hourly frp
@@ -2385,6 +2393,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
+  active = (flag_for_rrfs_smoke_coupling)
 [frp_std_hr]
   standard_name = frp_std_hourly
   long_name = hourly std frp
@@ -2392,6 +2401,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
+  active = (flag_for_rrfs_smoke_coupling)
 [fhist]
   standard_name = fhist
   long_name = fire hist
@@ -2399,6 +2409,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
+  active = (flag_for_rrfs_smoke_coupling)
 [coef_bb_dc]
   standard_name = coef_bb_dc
   long_name = coef bb dc from plumerise
@@ -2406,6 +2417,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
+  active = (flag_for_rrfs_smoke_coupling)
 [ebu_smoke]
   standard_name = ebu_smoke
   long_name = smoke buffer of ebu
@@ -2413,6 +2425,7 @@
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
   type = real
   kind = kind_phys
+  active = (flag_for_rrfs_smoke_coupling)
 [smoke_ext]
   standard_name = smoke_ext
   long_name = smoke optical extinction
@@ -2420,6 +2433,7 @@
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
   type = real
   kind = kind_phys
+  active = (flag_for_rrfs_smoke_coupling)
 [dust_ext]
   standard_name = dust_ext
   long_name = dust optical extinction
@@ -2427,6 +2441,7 @@
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
   type = real
   kind = kind_phys
+  active = (flag_for_rrfs_smoke_coupling)
 [chem3d]
   standard_name = chem3d_mynn_pbl_transport
   long_name = mynn pbl transport of smoke and dust
@@ -2434,6 +2449,7 @@
   dimensions = (horizontal_loop_extent,vertical_layer_dimension,2)
   type = real
   kind = kind_phys
+  active = (flag_for_rrfs_smoke_coupling)
 [min_fplume]
   standard_name = min_fplume
   long_name = miminum plume height
@@ -2441,6 +2457,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
+  active = (flag_for_rrfs_smoke_coupling)
 [max_fplume]
   standard_name = max_fplume
   long_name = maximum plume height
@@ -2448,6 +2465,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
+  active = (flag_for_rrfs_smoke_coupling)
 [rrfs_hwp]
   standard_name = rrfs_hwp
   long_name = rrfs hourly fire weather potential
@@ -2455,6 +2473,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
+  active = (flag_for_rrfs_smoke_coupling)
 [ushfsfci]
   standard_name = surface_upward_sensible_heat_flux_for_chemistry_coupling
   long_name = instantaneous upward sensible heat flux for chemistry coupling
@@ -5290,84 +5309,98 @@
   units = flag
   dimensions = ()
   type = logical
+  active = (flag_for_rrfs_smoke_coupling)
 [fire_turb]
   standard_name = rrfs_smoke_mynn_enh_vermix
   long_name = flag for rrfs smoke mynn enh vermix
   units = flag
   dimensions = ()
   type = logical
+  active = (flag_for_rrfs_smoke_coupling)
 [seas_opt]
   standard_name = rrfs_smoke_sea_salt_opt
   long_name = rrfs smoke sea salt emission option
   units = index
   dimensions = ()
   type = integer
+  active = (flag_for_rrfs_smoke_coupling)
 [dust_opt]
   standard_name = rrfs_smoke_dust_opt
   long_name = rrfs smoke dust chem option
   units = index
   dimensions = ()
   type = integer
+  active = (flag_for_rrfs_smoke_coupling)
 [biomass_burn_opt]
   standard_name = rrfs_smoke_biomass_burn_opt
   long_name = rrfs smoke biomass burning option
   units = index
   dimensions = ()
   type = integer
+  active = (flag_for_rrfs_smoke_coupling)
 [drydep_opt]
   standard_name = rrfs_smoke_drydep_opt
   long_name = rrfs smoke dry deposition option
   units = index
   dimensions = ()
   type = integer
+  active = (flag_for_rrfs_smoke_coupling)
 [wetdep_ls_opt]
   standard_name = rrfs_smoke_wetdep_ls_opt
   long_name = rrfs smoke large scale wet deposition option
   units = index
   dimensions = ()
   type = integer
+  active = (flag_for_rrfs_smoke_coupling)
 [do_plumerise]
   standard_name = rrfs_smoke_plumerise_flag
   long_name = rrfs smoke plumerise option
   units = index
   dimensions = ()
   type = logical
+  active = (flag_for_rrfs_smoke_coupling)
 [plumerisefire_frq]
   standard_name = rrfs_smoke_plumerisefire_frq
   long_name = rrfs smoke add smoke option
   units = index
   dimensions = ()
   type = integer
+  active = (flag_for_rrfs_smoke_coupling)
 [addsmoke_flag]
   standard_name = rrfs_smoke_addsmoke_flag
   long_name = rrfs smoke add smoke option
   units = index
   dimensions = ()
   type = integer
+  active = (flag_for_rrfs_smoke_coupling)
 [smoke_forecast]
   standard_name = rrfs_smoke_smoke_forecast_opt
   long_name = flag for rrfs smoke forecast
   units = flag
   dimensions = ()
   type = logical
+  active = (flag_for_rrfs_smoke_coupling)
 [aero_ind_fdb]
   standard_name = rrfs_smoke_aero_ind_fdb_opt
   long_name = flag for rrfs wfa ifa emission
   units = flag
   dimensions = ()
   type = logical
+  active = (flag_for_rrfs_smoke_coupling)
 [aero_dir_fdb]
   standard_name = rrfs_smoke_dust_rad_fdb_opt
   long_name = flag for rrfs smoke dust rad feedback
   units = flag
   dimensions = ()
   type = logical
+  active = (flag_for_rrfs_smoke_coupling)
 [rrfs_smoke_debug]
   standard_name = rrfs_smoke_plumerise_debug
   long_name = flag for rrfs smoke plumerise debug
   units = flag
   dimensions = ()
   type = logical
+  active = (flag_for_rrfs_smoke_coupling)
 [ncnvcld3d]
   standard_name = number_of_convective_cloud_variables_in_xyz_dimensioned_restart_array
   long_name = number of convective 3d clouds fields
