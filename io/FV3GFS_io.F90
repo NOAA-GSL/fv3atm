@@ -829,7 +829,6 @@ module FV3GFS_io_mod
           Sfcprop(nb)%smoke_GBBEPx(ix,k,1)  = gbbepx_var(i,j,k,1)
           Sfcprop(nb)%smoke_GBBEPx(ix,k,2)  = gbbepx_var(i,j,k,2)
           Sfcprop(nb)%smoke_GBBEPx(ix,k,3)  = gbbepx_var(i,j,k,3)
-          Sfcprop(nb)%smoke_GBBEPx(ix,k,4)  = gbbepx_var(i,j,k,4)
         enddo
       enddo
     enddo
