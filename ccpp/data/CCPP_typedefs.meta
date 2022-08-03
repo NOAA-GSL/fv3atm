@@ -83,13 +83,6 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-[aerodp]
-  standard_name = atmosphere_optical_thickness_due_to_ambient_aerosol_particles
-  long_name = vertical integrated optical depth for various aerosol species
-  units = none
-  dimensions = (horizontal_loop_extent,number_of_species_for_aerosol_optical_depth)
-  type = real
-  kind = kind_phys
 [alb1d]
   standard_name = surface_albedo_perturbation
   long_name = surface albedo perturbation

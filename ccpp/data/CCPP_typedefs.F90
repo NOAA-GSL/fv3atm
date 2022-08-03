@@ -61,7 +61,6 @@ module CCPP_typedefs
     real (kind=kind_phys), pointer      :: adjvisbmu(:)       => null()  !<
     real (kind=kind_phys), pointer      :: adjvisdfu(:)       => null()  !<
     real (kind=kind_phys), pointer      :: adjvisdfd(:)       => null()  !<
-    real (kind=kind_phys), pointer      :: aerodp(:,:)        => null()  !<
     real (kind=kind_phys), pointer      :: alb1d(:)           => null()  !<
     real (kind=kind_phys), pointer      :: alpha(:,:)         => null()  !<
     real (kind=kind_phys), pointer      :: bexp1d(:)          => null()  !<
@@ -546,7 +545,6 @@ contains
     allocate (Interstitial%adjvisbmu       (IM))
     allocate (Interstitial%adjvisdfu       (IM))
     allocate (Interstitial%adjvisdfd       (IM))
-    allocate (Interstitial%aerodp          (IM,NSPC1))
     allocate (Interstitial%alb1d           (IM))
     if (.not. Model%do_RRTMGP) then
       ! RRTMGP uses its own cloud_overlap_param
@@ -1197,7 +1195,6 @@ contains
     type(GFS_control_type), intent(in) :: Model
     integer :: iGas
     !
-    Interstitial%aerodp       = clear_val
     Interstitial%alb1d        = clear_val
     if (.not. Model%do_RRTMGP) then
       Interstitial%alpha      = clear_val

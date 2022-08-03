@@ -18,6 +18,11 @@ module GFS_typedefs
 
    ! To ensure that these values match what's in the physics, array
    ! sizes are compared in the auto-generated physics caps in debug mode
+   ! from module_radiation_aerosols
+   integer, parameter :: NSPC    = 5
+   integer, parameter :: NSPC1   = NSPC + 1
+   ! To ensure that these values match what's in the physics, array
+   ! sizes are compared in the auto-generated physics caps in debug mode
    ! from aerclm_def
    integer, parameter, private :: ntrcaerm = 15
 
@@ -1605,6 +1610,7 @@ module GFS_typedefs
     real (kind=kind_phys), pointer :: coszen(:)    => null()  !< mean cos of zenith angle over rad call period
     real (kind=kind_phys), pointer :: tsflw (:)    => null()  !< surface air temp during lw calculation in k
     real (kind=kind_phys), pointer :: semis (:)    => null()  !< surface lw emissivity in fraction
+    real (kind=kind_phys), pointer :: aerodp (:)   => null()  
 
 !--- In/Out (???) (radiaition only)
     real (kind=kind_phys), pointer :: coszdg(:)    => null()  !< daytime mean cosz over rad call period
@@ -6364,6 +6370,7 @@ module GFS_typedefs
     allocate (Radtend%coszen (IM))
     allocate (Radtend%tsflw  (IM))
     allocate (Radtend%semis  (IM))
+    allocate (Radtend%aerodp  (IM,NSPC1))
 
     Radtend%htrsw  = clear_val
     Radtend%htrlw  = clear_val
@@ -6371,6 +6378,7 @@ module GFS_typedefs
     Radtend%coszen = clear_val
     Radtend%tsflw  = clear_val
     Radtend%semis  = clear_val
+    Radtend%aerodp  = clear_val
 
 !--- In/Out (???) (radiation only)
     allocate (Radtend%coszdg (IM))
