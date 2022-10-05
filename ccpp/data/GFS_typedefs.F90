@@ -402,6 +402,23 @@ module GFS_typedefs
     real (kind=kind_phys), pointer :: dsnowprv   (:)    => null()  !< snow precipitation rate from previous timestep
     real (kind=kind_phys), pointer :: dgraupelprv(:)    => null()  !< graupel precipitation rate from previous timestep
 
+    !--- aerosol surface emissions for Thompson microphysics & smoke
+    real (kind=kind_phys), pointer :: emdust  (:)     => null()  !< instantaneous dust emission
+    real (kind=kind_phys), pointer :: emseas  (:)     => null()  !< instantaneous sea salt emission
+    real (kind=kind_phys), pointer :: emanoc  (:)     => null()  !< instantaneous anthro. oc emission
+
+    !--- Smoke. These 3 arrays are hourly, so their dimension is imx24 (output is hourly)
+    real (kind=kind_phys), pointer :: ebb_smoke_hr(:)    => null()  !< hourly smoke emission
+    real (kind=kind_phys), pointer :: frp_hr      (:)    => null()  !< hourly FRP
+    real (kind=kind_phys), pointer :: frp_std_hr  (:)    => null()  !< hourly std. FRP
+
+    !--- For fire diurnal cycle
+    real (kind=kind_phys), pointer :: fhist       (:)   => null()  !< instantaneous fire coef_bb
+    real (kind=kind_phys), pointer :: coef_bb_dc  (:)   => null()  !< instantaneous fire coef_bb
+
+    !--- For smoke and dust optical extinction
+    real (kind=kind_phys), pointer :: fire_in   (:,:)   => null()  !< fire auxiliary inputs
+
     contains
       procedure :: create  => sfcprop_create  !<   allocate array data
   end type GFS_sfcprop_type
@@ -537,25 +554,13 @@ module GFS_typedefs
     real (kind=kind_phys), pointer :: nwfa2d  (:)     => null()  !< instantaneous water-friendly sfc aerosol source
     real (kind=kind_phys), pointer :: nifa2d  (:)     => null()  !< instantaneous ice-friendly sfc aerosol source
 
-    !--- aerosol surface emissions for Thompson microphysics & smoke
-    real (kind=kind_phys), pointer :: emdust  (:)     => null()  !< instantaneous dust emission
-    real (kind=kind_phys), pointer :: emseas  (:)     => null()  !< instantaneous sea salt emission
-    real (kind=kind_phys), pointer :: emanoc  (:)     => null()  !< instantaneous anthro. oc emission
-
-    !--- These 3 arrays are hourly, so their dimension is imx24 (output is hourly)
-    real (kind=kind_phys), pointer :: ebb_smoke_hr(:)    => null()  !< hourly smoke emission
-    real (kind=kind_phys), pointer :: frp_hr      (:)    => null()  !< hourly FRP
-    real (kind=kind_phys), pointer :: frp_std_hr  (:)    => null()  !< hourly std. FRP
-
     !--- For fire diurnal cycle
-    real (kind=kind_phys), pointer :: fhist       (:)   => null()  !< instantaneous fire coef_bb
-    real (kind=kind_phys), pointer :: coef_bb_dc  (:)   => null()  !< instantaneous fire coef_bb
     real (kind=kind_phys), pointer :: ebu_smoke (:,:)   => null()  !< 3D ebu array
 
     !--- For smoke and dust optical extinction
     real (kind=kind_phys), pointer :: smoke_ext (:,:)   => null()  !< 3D aod array
     real (kind=kind_phys), pointer :: dust_ext  (:,:)   => null()  !< 3D aod array
-    real (kind=kind_phys), pointer :: fire_in   (:,:)   => null()  !< fire auxeliary inputs
+
     !--- For MYNN PBL transport of  smoke and dust
     real (kind=kind_phys), pointer :: chem3d  (:,:,:)   => null()  !< 3D aod array
     real (kind=kind_phys), pointer :: ddvel   (:,:  )   => null()  !< 2D dry deposition velocity
@@ -658,6 +663,8 @@ module GFS_typedefs
     integer              :: nblks           !< for explicit data blocking: number of blocks
     integer,     pointer :: blksz(:)        !< for explicit data blocking: block sizes of all blocks
     integer              :: ncols           !< total number of columns for all blocks
+
+    integer              :: fire_aux_data_levels !< vertical levels of fire auxiliary data
 
 !--- coupling parameters
     logical              :: cplflx          !< default no cplflx collection
@@ -2455,6 +2462,30 @@ module GFS_typedefs
         Sfcprop%conv_act_m = zero
     end if
 
+    if(Model%rrfs_sd) then
+    !--- needed for smoke aerosol option
+      allocate (Sfcprop%emdust    (IM))
+      allocate (Sfcprop%emseas    (IM))
+      allocate (Sfcprop%emanoc    (IM))
+      allocate (Sfcprop%ebb_smoke_hr (IM))
+      allocate (Sfcprop%frp_hr    (IM))
+      allocate (Sfcprop%frp_std_hr(IM))
+      allocate (Sfcprop%fhist     (IM))
+      allocate (Sfcprop%coef_bb_dc(IM))
+      allocate (Sfcprop%fire_in   (IM,Model%fire_aux_data_levels))
+
+      ! IMPORTANT: This initialization must match rrfs_sd_fill_data
+      Sfcprop%emdust     = clear_val
+      Sfcprop%emseas     = clear_val
+      Sfcprop%emanoc     = clear_val
+      Sfcprop%ebb_smoke_hr  = clear_val
+      Sfcprop%frp_hr     = clear_val
+      Sfcprop%frp_std_hr = clear_val
+      Sfcprop%fhist      = 1.
+      Sfcprop%coef_bb_dc = clear_val
+      Sfcprop%fire_in    = clear_val
+    endif
+
   end subroutine sfcprop_create
 
 
@@ -2679,18 +2710,18 @@ module GFS_typedefs
     endif
 
     ! -- Aerosols coupling options
-    if (Model%cplchm .or. Model%rrfs_sd) then
+    if (Model%cplchm) then
+      ! -- instantaneous 3d fluxes of nonconvective ice and liquid precipitations
+      allocate (Coupling%pfi_lsan  (IM,Model%levs))
+      allocate (Coupling%pfl_lsan  (IM,Model%levs))
+      Coupling%pfi_lsan  = clear_val
+      Coupling%pfl_lsan  = clear_val
       !--- outgoing instantaneous quantities
       allocate (Coupling%ushfsfci  (IM))
       !--- accumulated convective rainfall
       allocate (Coupling%rainc_cpl (IM))
-      ! -- instantaneous 3d fluxes of nonconvective ice and liquid precipitations
-      allocate (Coupling%pfi_lsan  (IM,Model%levs))
-      allocate (Coupling%pfl_lsan  (IM,Model%levs))
       Coupling%rainc_cpl = clear_val
       Coupling%ushfsfci  = clear_val
-      Coupling%pfi_lsan  = clear_val
-      Coupling%pfl_lsan  = clear_val
     endif
 
     ! -- additional coupling options for air quality
@@ -2759,38 +2790,20 @@ module GFS_typedefs
       Coupling%nifa2d   = clear_val
     endif
 
-   if(Model%rrfs_sd) then
+    if(Model%rrfs_sd) then
     !--- needed for smoke aerosol option
-      allocate (Coupling%emdust    (IM))
-      allocate (Coupling%emseas    (IM))
-      allocate (Coupling%emanoc    (IM))
-      allocate (Coupling%ebb_smoke_hr (IM))
-      allocate (Coupling%frp_hr    (IM))
-      allocate (Coupling%frp_std_hr(IM))
-      allocate (Coupling%fhist     (IM))
-      allocate (Coupling%coef_bb_dc(IM))
       allocate (Coupling%ebu_smoke (IM,Model%levs))
       allocate (Coupling%smoke_ext (IM,Model%levs))
       allocate (Coupling%dust_ext  (IM,Model%levs))
-      allocate (Coupling%fire_in   (IM,10))
       allocate (Coupling%chem3d    (IM,Model%levs,2))
       allocate (Coupling%ddvel     (IM,2))
       allocate (Coupling%min_fplume(IM))
       allocate (Coupling%max_fplume(IM))
       allocate (Coupling%rrfs_hwp  (IM))
       allocate (Coupling%dqdti        (IM,Model%levs))
-      Coupling%emdust     = clear_val
-      Coupling%emseas     = clear_val
-      Coupling%emanoc     = clear_val
-      Coupling%ebb_smoke_hr  = clear_val
-      Coupling%frp_hr     = clear_val
-      Coupling%frp_std_hr = clear_val
-      Coupling%fhist      = 1.
-      Coupling%coef_bb_dc = clear_val
       Coupling%ebu_smoke  = clear_val
       Coupling%smoke_ext  = clear_val
       Coupling%dust_ext   = clear_val
-      Coupling%fire_in    = clear_val
       Coupling%chem3d     = clear_val
       Coupling%ddvel      = clear_val
       Coupling%min_fplume = clear_val
@@ -3762,6 +3775,8 @@ module GFS_typedefs
     Model%rrfs_smoke_debug  = rrfs_smoke_debug
     Model%mix_chem          = mix_chem
     Model%enh_mix           = enh_mix
+
+    Model%fire_aux_data_levels = 10
 
 !--- integrated dynamics through earth's atmosphere
     Model%lsidea           = lsidea

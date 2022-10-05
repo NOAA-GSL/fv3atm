@@ -3667,7 +3667,7 @@ module GFS_diagnostics
       ExtDiag(idx)%mod_name = 'gfs_sfc'
       allocate (ExtDiag(idx)%data(nblks))
       do nb = 1,nblks
-        ExtDiag(idx)%data(nb)%var2 => Coupling(nb)%emdust
+        ExtDiag(idx)%data(nb)%var2 => Sfcprop(nb)%emdust
       enddo
 
       idx = idx + 1
@@ -3678,7 +3678,7 @@ module GFS_diagnostics
       ExtDiag(idx)%mod_name = 'gfs_sfc'
       allocate (ExtDiag(idx)%data(nblks))
       do nb = 1,nblks
-        ExtDiag(idx)%data(nb)%var2 => Coupling(nb)%emseas
+        ExtDiag(idx)%data(nb)%var2 => Sfcprop(nb)%emseas
       enddo
 
       idx = idx + 1
@@ -3689,7 +3689,7 @@ module GFS_diagnostics
       ExtDiag(idx)%mod_name = 'gfs_sfc'
       allocate (ExtDiag(idx)%data(nblks))
       do nb = 1,nblks
-        ExtDiag(idx)%data(nb)%var2 => Coupling(nb)%emanoc
+        ExtDiag(idx)%data(nb)%var2 => Sfcprop(nb)%emanoc
       enddo
 
       idx = idx + 1
@@ -3700,7 +3700,7 @@ module GFS_diagnostics
       ExtDiag(idx)%mod_name = 'gfs_sfc'
       allocate (ExtDiag(idx)%data(nblks))
       do nb = 1,nblks
-        ExtDiag(idx)%data(nb)%var2 => Coupling(nb)%coef_bb_dc
+        ExtDiag(idx)%data(nb)%var2 => Sfcprop(nb)%coef_bb_dc
       enddo
 
       idx = idx + 1
@@ -3744,7 +3744,18 @@ module GFS_diagnostics
       ExtDiag(idx)%mod_name = 'gfs_sfc'
       allocate (ExtDiag(idx)%data(nblks))
       do nb = 1,nblks
-       ExtDiag(idx)%data(nb)%var2 => Coupling(nb)%ebb_smoke_hr
+       ExtDiag(idx)%data(nb)%var2 => Sfcprop(nb)%ebb_smoke_hr
+      enddo
+
+      idx = idx + 1
+      ExtDiag(idx)%axes = 2
+      ExtDiag(idx)%name = 'fhist'
+      ExtDiag(idx)%desc = 'coefficient to scale the fire activity depending on the fire duration'
+      ExtDiag(idx)%unit = ' '
+      ExtDiag(idx)%mod_name = 'gfs_sfc'
+      allocate (ExtDiag(idx)%data(nblks))
+      do nb = 1,nblks
+       ExtDiag(idx)%data(nb)%var2 => Sfcprop(nb)%ebb_smoke_hr
       enddo
 
       idx = idx + 1
@@ -3755,7 +3766,7 @@ module GFS_diagnostics
       ExtDiag(idx)%mod_name = 'gfs_sfc'
       allocate (ExtDiag(idx)%data(nblks))
       do nb = 1,nblks
-       ExtDiag(idx)%data(nb)%var2 => Coupling(nb)%frp_hr
+       ExtDiag(idx)%data(nb)%var2 => Sfcprop(nb)%frp_hr
       enddo
 
       idx = idx + 1
@@ -3766,7 +3777,7 @@ module GFS_diagnostics
       ExtDiag(idx)%mod_name = 'gfs_sfc'
       allocate (ExtDiag(idx)%data(nblks))
       do nb = 1,nblks
-       ExtDiag(idx)%data(nb)%var2 => Coupling(nb)%frp_std_hr
+       ExtDiag(idx)%data(nb)%var2 => Sfcprop(nb)%frp_std_hr
       enddo
 
       idx = idx + 1

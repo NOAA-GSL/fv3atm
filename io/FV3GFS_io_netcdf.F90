@@ -11,7 +11,7 @@ module FV3GFS_io_netCDF_mod
 
   integer, parameter, public :: GFS_io_max_dims = 10
   integer, parameter, public :: GFS_io_max_var_dims = 4
-  integer, parameter, public :: GFS_io_dimname_len = 10
+  integer, parameter, public :: GFS_io_dimname_len = 40
   integer, parameter, public :: GFS_io_max_vars = 200
   integer, parameter, public :: GFS_io_varname_len = 40
   integer, parameter, public :: GFS_io_invalid_id = -1
@@ -615,7 +615,7 @@ contains ! ------------------------------------------------------------
     else if(super_verbose) then
       ! This is not an error. It happens for write_data variables.
 101    format(A,': No array provided for writing variable "',A,'"')
-       write(0,101) restart%filename,trim(var%name)
+       write(0,101) trim(restart%filename),trim(var%name)
     endif
 
   contains
@@ -627,10 +627,10 @@ contains ! ------------------------------------------------------------
       character(*), intent(in) :: what
       integer :: ierr
       if(actual_size>expected_size) then
-         write(0,38) restart%filename,trim(var%name),trim(what),actual_size,expected_size
+         write(0,38) trim(restart%filename),trim(var%name),trim(what),actual_size,expected_size
 38       format(A,': WARNING: array too large. Var "',A,'" array ',A,' has ',I0,' elements instead of file size ',I0,' elements. Some data will be ignored.')
        else if(actual_size<expected_size) then
-         write(0,99) restart%filename,trim(var%name),trim(what),actual_size,expected_size
+         write(0,99) trim(restart%filename),trim(var%name),trim(what),actual_size,expected_size
 99       format(A,': WARNING: insufficient data. Var "',A,'" array ',A,' has ',I0,' elements which is less than file size ',I0,' elements. Some data in the file will not be initialized. NetCDF will probably fill it with zeroes.')
       endif
     end subroutine check_size
@@ -1443,7 +1443,7 @@ return
 
     if(do_abort) then
 38     format(A': MPI_Aborting because no dimension is defined with name "',A,'"')
-       write(0,38) restart%filename,trim(name)
+       write(0,38) trim(restart%filename),trim(name)
        call MPI_Abort(MPI_COMM_WORLD,1,ierr)
     endif
   end function find_dim
@@ -1475,7 +1475,7 @@ return
 
     if(abort) then
 38     format(A': MPI_Aborting because no variable is defined with name "',A,'"')
-       write(0,38) restart%filename,trim(name)
+       write(0,38) trim(restart%filename),trim(name)
        call MPI_Abort(MPI_COMM_WORLD,1,ierr)
     endif
   end function find_var
@@ -1506,7 +1506,7 @@ return
 
     if(do_abort) then
 38     format(A': MPI_Aborting because no dimension is defined with NetCDF ID "',I0,'"')
-       write(0,38) restart%filename,dimid
+       write(0,38) trim(restart%filename),dimid
        call MPI_Abort(MPI_COMM_WORLD,1,ierr)
     endif
   end function find_dimid

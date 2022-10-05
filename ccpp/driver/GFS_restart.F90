@@ -125,7 +125,7 @@ module GFS_restart
       Restart%num2d = Restart%num2d + Model%num_dfi_radar
     endif
     if (Model%rrfs_sd) then
-      Restart%num2d = Restart%num2d + 1
+      Restart%num2d = Restart%num2d + 5
     endif
 
     Restart%num3d = Model%ntot3d
@@ -146,6 +146,9 @@ module GFS_restart
     ! MYNN PBL
     if (Model%do_mynnedmf) then
       Restart%num3d = Restart%num3d + 9
+    endif
+    if (Model%rrfs_sd) then
+      Restart%num3d = Restart%num3d + 6
     endif
 
     if (Model%num_dfi_radar > 0) then
@@ -421,6 +424,26 @@ module GFS_restart
     ! RRFS-SD
     if (Model%rrfs_sd) then
       num = num + 1
+      Restart%name2d(num) = 'ddvel_1'
+      do nb = 1,nblks
+        Restart%data(nb,num)%var2p => Coupling(nb)%ddvel(:,1)
+      enddo
+      num = num + 1
+      Restart%name2d(num) = 'ddvel_2'
+      do nb = 1,nblks
+        Restart%data(nb,num)%var2p => Coupling(nb)%ddvel(:,2)
+      enddo
+      num = num + 1
+      Restart%name2d(num) = 'min_fplume'
+      do nb = 1,nblks
+        Restart%data(nb,num)%var2p => Coupling(nb)%min_fplume(:)
+      enddo
+      num = num + 1
+      Restart%name2d(num) = 'max_fplume'
+      do nb = 1,nblks
+        Restart%data(nb,num)%var2p => Coupling(nb)%max_fplume(:)
+      enddo
+      num = num + 1
       Restart%name2d(num) = 'rrfs_hwp'
       do nb = 1,nblks
         Restart%data(nb,num)%var2p => Coupling(nb)%rrfs_hwp(:)
@@ -541,6 +564,39 @@ module GFS_restart
               :,:,Model%ix_dfi_radar(itime))
           enddo
         endif
+      enddo
+    endif
+
+    if(Model%rrfs_sd) then
+      num = num + 1
+      Restart%name3d(num) = 'ebu_smoke'
+      do nb = 1,nblks
+        Restart%data(nb,num)%var3p => Coupling(nb)%ebu_smoke(:,:)
+      enddo
+      num = num + 1
+      Restart%name3d(num) = 'smoke_ext'
+      do nb = 1,nblks
+        Restart%data(nb,num)%var3p => Coupling(nb)%smoke_ext(:,:)
+      enddo
+      num = num + 1
+      Restart%name3d(num) = 'dust_ext'
+      do nb = 1,nblks
+        Restart%data(nb,num)%var3p => Coupling(nb)%dust_ext(:,:)
+      enddo
+      num = num + 1
+      Restart%name3d(num) = 'chem3d_1'
+      do nb = 1,nblks
+        Restart%data(nb,num)%var3p => Coupling(nb)%chem3d(:,:,1)
+      enddo
+      num = num + 1
+      Restart%name3d(num) = 'chem3d_2'
+      do nb = 1,nblks
+        Restart%data(nb,num)%var3p => Coupling(nb)%chem3d(:,:,2)
+      enddo
+      num = num + 1
+      Restart%name3d(num) = 'dqdti'
+      do nb = 1,nblks
+        Restart%data(nb,num)%var3p => Coupling(nb)%dqdti(:,:)
       enddo
     endif
 

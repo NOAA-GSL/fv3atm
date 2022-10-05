@@ -1867,6 +1867,78 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
+[emdust]
+  standard_name = emission_of_dust_for_smoke
+  long_name = emission of dust for smoke
+  units = ug m-2 s-1
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (do_smoke_coupling)
+[emseas]
+  standard_name = emission_of_seas_for_smoke
+  long_name = emission of seas for smoke
+  units = ug m-2 s-1
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (do_smoke_coupling)
+[emanoc]
+  standard_name = emission_of_anoc_for_thompson_mp
+  long_name = emission of anoc for thompson mp
+  units = ug m-2 s-1
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (do_smoke_coupling)
+[ebb_smoke_hr]
+  standard_name = surface_smoke_emission
+  long_name = emission of surface smoke
+  units = ug m-2 s-1
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (do_smoke_coupling)
+[frp_hr]
+  standard_name = frp_hourly
+  long_name = hourly fire radiative power
+  units = MW
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (do_smoke_coupling)
+[frp_std_hr]
+  standard_name = frp_std_hourly
+  long_name = hourly stdandard deviation of fire radiative power
+  units = MW
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (do_smoke_coupling)
+[fhist]
+  standard_name = fire_hist
+  long_name = coefficient to scale the fire activity depending on the fire duration
+  units = none
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (do_smoke_coupling)
+[coef_bb_dc]
+  standard_name = coef_bb_dc
+  long_name = coef to estimate the fire emission
+  units = none
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (do_smoke_coupling)
+[fire_in]
+  standard_name = smoke_fire_auxiliary_input
+  long_name = smoke fire auxiliary input variables
+  units = various
+  dimensions = (horizontal_loop_extent,fire_auxiliary_data_extent)
+  type = real
+  kind = kind_phys
+  active = (do_smoke_coupling)
 
 ########################################################################
 [ccpp-table-properties]
@@ -2471,70 +2543,6 @@
   type = real
   kind = kind_phys
   active = (control_for_microphysics_scheme == identifier_for_thompson_microphysics_scheme .and. flag_for_aerosol_physics)
-[emdust]
-  standard_name = emission_of_dust_for_smoke
-  long_name = emission of dust for smoke
-  units = ug m-2 s-1
-  dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
-  active = (do_smoke_coupling)
-[emseas]
-  standard_name = emission_of_seas_for_smoke
-  long_name = emission of seas for smoke
-  units = ug m-2 s-1
-  dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
-  active = (do_smoke_coupling)
-[emanoc]
-  standard_name = emission_of_anoc_for_thompson_mp
-  long_name = emission of anoc for thompson mp
-  units = ug m-2 s-1
-  dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
-  active = (do_smoke_coupling)
-[ebb_smoke_hr]
-  standard_name = surface_smoke_emission
-  long_name = emission of surface smoke
-  units = ug m-2 s-1
-  dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
-  active = (do_smoke_coupling)
-[frp_hr]
-  standard_name = frp_hourly
-  long_name = hourly fire radiative power
-  units = MW
-  dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
-  active = (do_smoke_coupling)
-[frp_std_hr]
-  standard_name = frp_std_hourly
-  long_name = hourly stdandard deviation of fire radiative power
-  units = MW
-  dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
-  active = (do_smoke_coupling)
-[fhist]
-  standard_name = fire_hist
-  long_name = coefficient to scale the fire activity depending on the fire duration
-  units = none
-  dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
-  active = (do_smoke_coupling)
-[coef_bb_dc]
-  standard_name = coef_bb_dc
-  long_name = coef to estimate the fire emission
-  units = none
-  dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
-  active = (do_smoke_coupling)
 [ebu_smoke]
   standard_name = ebu_smoke
   long_name = buffer of vertical fire emission
@@ -2556,14 +2564,6 @@
   long_name = extinction coefficient in air due to dust
   units = various
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
-  type = real
-  kind = kind_phys
-  active = (do_smoke_coupling)
-[fire_in]
-  standard_name = smoke_fire_auxeliary_input
-  long_name = smoke fire auxeliary input variables
-  units = various
-  dimensions = (horizontal_loop_extent,10)
   type = real
   kind = kind_phys
   active = (do_smoke_coupling)
@@ -6239,6 +6239,12 @@
   units = flag
   dimensions = ()
   type = logical
+[fire_aux_data_levels]
+  standard_name = fire_auxiliary_data_extent
+  long_name = number of levels of fire auxiliary data
+  units = count
+  dimensions = ()
+  type = integer
 
 ########################################################################
 [ccpp-table-properties]
