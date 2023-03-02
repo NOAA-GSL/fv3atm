@@ -309,6 +309,14 @@
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
   type = real
   kind = kind_phys
+[qgrs(:,:,index_of_updraft_area_fraction_in_tracer_concentration_array)]
+  standard_name = prognostic_updraft_area_fraction_in_convection
+  long_name = convective updraft area fraction
+  units = frac
+  dimensions = (horizontal_loop_extent,vertical_layer_dimension)
+  type = real
+  kind = kind_phys
+  active = (index_of_updraft_area_fraction_in_tracer_concentration_array > 0 )
 [qgrs(:,:,index_for_smoke_in_tracer_concentration_array)]
   standard_name = smoke_tracer_concentration
   long_name = concentration of smoke
@@ -559,7 +567,14 @@
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
   type = real
   kind = kind_phys
-
+[gq0(:,:,index_of_updraft_area_fraction_in_tracer_concentration_array)]
+  standard_name = updraft_area_fraction_updated_by_physics
+  long_name = convective updraft area fraction updated by physics
+  units = frac
+  dimensions = (horizontal_loop_extent,vertical_layer_dimension)
+  type = real
+  kind = kind_phys
+  active = ( index_of_updraft_area_fraction_in_tracer_concentration_array > 0 )
 ########################################################################
 [ccpp-table-properties]
   name = GFS_sfcprop_type
@@ -2040,7 +2055,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_surface_flux_coupling .or. flag_for_stochastic_physics_perturbations .or. flag_for_chemistry_coupling .or. flag_for_global_cellular_automata)
+  active = (flag_for_surface_flux_coupling .or. flag_for_stochastic_physics_perturbations .or. flag_for_chemistry_coupling .or. flag_for_global_cellular_automata .or. flag_for_land_coupling)
 [rainc_cpl]
   standard_name = cumulative_lwe_thickness_of_convective_precipitation_amount_for_coupling
   long_name = total convective precipitation
@@ -2048,7 +2063,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_chemistry_coupling)
+  active = (flag_for_surface_flux_coupling .or. flag_for_chemistry_coupling .or. flag_for_land_coupling)
 [snow_cpl]
   standard_name = cumulative_lwe_thickness_of_snow_amount_for_coupling
   long_name = total snow precipitation
@@ -2056,7 +2071,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_surface_flux_coupling .or. flag_for_stochastic_physics_perturbations .or. flag_for_chemistry_coupling .or. flag_for_global_cellular_automata)
+  active = (flag_for_surface_flux_coupling .or. flag_for_stochastic_physics_perturbations .or. flag_for_chemistry_coupling .or. flag_for_global_cellular_automata .or. flag_for_land_coupling)
 [dusfc_cpl]
   standard_name = cumulative_surface_x_momentum_flux_for_coupling_multiplied_by_timestep
   long_name = cumulative sfc x momentum flux multiplied by timestep
@@ -2096,7 +2111,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_surface_flux_coupling)
+  active = (flag_for_surface_flux_coupling .or. flag_for_land_coupling)
 [dswsfc_cpl]
   standard_name = cumulative_surface_downwelling_shortwave_flux_for_coupling_multiplied_by_timestep
   long_name = cumulative sfc downward sw flux multiplied by timestep
@@ -2104,7 +2119,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_surface_flux_coupling)
+  active = (flag_for_surface_flux_coupling .or. flag_for_land_coupling)
 [dnirbm_cpl]
   standard_name = cumulative_surface_downwelling_direct_nir_shortwave_flux_for_coupling_multiplied_by_timestep
   long_name = cumulative sfc nir beam downward sw flux multiplied by timestep
@@ -2152,7 +2167,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_surface_flux_coupling)
+  active = (flag_for_surface_flux_coupling .or. flag_for_land_coupling)
 [nnirbm_cpl]
   standard_name = cumulative_surface_net_downwelling_direct_nir_shortwave_flux_for_coupling_multiplied_by_timestep
   long_name = cumulative net nir beam downward sw flux multiplied by timestep
@@ -2160,7 +2175,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_surface_flux_coupling)
+  active = (flag_for_surface_flux_coupling .or. flag_for_land_coupling)
 [nnirdf_cpl]
   standard_name = cumulative_surface_net_downwellling_diffuse_nir_shortwave_flux_for_coupling_multiplied_by_timestep
   long_name = cumulative net nir diff downward sw flux multiplied by timestep
@@ -2168,7 +2183,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_surface_flux_coupling)
+  active = (flag_for_surface_flux_coupling .or. flag_for_land_coupling)
 [nvisbm_cpl]
   standard_name = cumulative_surface_net_downwelling_direct_uv_and_vis_shortwave_flux_for_coupling_multiplied_by_timestep
   long_name = cumulative net uv+vis beam downward sw rad flux multiplied by timestep
@@ -2176,7 +2191,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_surface_flux_coupling)
+  active = (flag_for_surface_flux_coupling .or. flag_for_land_coupling)
 [nvisdf_cpl]
   standard_name = cumulative_surface_net_downwelling_diffuse_uv_and_vis_shortwave_flux_for_coupling_multiplied_by_timestep
   long_name = cumulative net uv+vis diff downward sw rad flux multiplied by timestep
@@ -2184,7 +2199,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_surface_flux_coupling)
+  active = (flag_for_surface_flux_coupling .or. flag_for_land_coupling)
 [dusfci_cpl]
   standard_name = surface_x_momentum_flux_for_coupling
   long_name = instantaneous sfc x momentum flux
@@ -2280,7 +2295,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_surface_flux_coupling .or. flag_for_air_quality_coupling)
+  active = (flag_for_surface_flux_coupling .or. flag_for_air_quality_coupling .or. flag_for_land_coupling)
 [nnirbmi_cpl]
   standard_name = surface_net_downwelling_direct_nir_shortwave_flux_for_coupling
   long_name = instantaneous net nir beam sfc downward sw flux
@@ -2288,7 +2303,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_surface_flux_coupling)
+  active = (flag_for_surface_flux_coupling .or. flag_for_land_coupling)
 [nnirdfi_cpl]
   standard_name = surface_net_downwelling_diffuse_nir_shortwave_flux_for_coupling
   long_name = instantaneous net nir diff sfc downward sw flux
@@ -2296,7 +2311,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_surface_flux_coupling)
+  active = (flag_for_surface_flux_coupling .or. flag_for_land_coupling)
 [nvisbmi_cpl]
   standard_name = surface_net_downwelling_direct_uv_and_vis_shortwave_flux_for_coupling
   long_name = instantaneous net uv+vis beam downward sw flux
@@ -2304,7 +2319,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_surface_flux_coupling)
+  active = (flag_for_surface_flux_coupling .or. flag_for_land_coupling)
 [nvisdfi_cpl]
   standard_name = surface_net_downwelling_diffuse_uv_and_vis_shortwave_flux_for_coupling
   long_name = instantaneous net uv+vis diff downward sw flux
@@ -2312,7 +2327,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_surface_flux_coupling)
+  active = (flag_for_surface_flux_coupling .or. flag_for_land_coupling)
 [t2mi_cpl]
   standard_name = temperature_at_2m_for_coupling
   long_name = instantaneous T2m
@@ -2360,7 +2375,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_surface_flux_coupling .or. flag_for_air_quality_coupling)
+  active = (flag_for_surface_flux_coupling .or. flag_for_air_quality_coupling .or. flag_for_land_coupling)
 [ulwsfcin_cpl]
   standard_name = surface_upwelling_longwave_flux_from_coupled_process
   long_name = surface upwelling LW flux for coupling
@@ -2401,6 +2416,46 @@
   type = real
   kind = kind_phys
   active = (flag_for_surface_flux_coupling)
+[ulwsfcin_med]
+  standard_name = surface_upwelling_longwave_flux_over_ocean_from_mediator
+  long_name = surface upwelling LW flux over ocean for coupling
+  units = W m-2
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (flag_for_surface_flux_coupling .and. do_mediator_atmosphere_ocean_fluxes)
+[dusfcin_med]
+  standard_name = surface_x_momentum_flux_over_ocean_from_mediator
+  long_name = sfc x momentum flux over ocean for coupling
+  units = Pa
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (flag_for_surface_flux_coupling .and. do_mediator_atmosphere_ocean_fluxes)
+[dvsfcin_med]
+  standard_name = surface_y_momentum_flux_over_ocean_from_mediator
+  long_name = sfc y momentum flux over ocean for coupling
+  units = Pa
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (flag_for_surface_flux_coupling .and. do_mediator_atmosphere_ocean_fluxes)
+[dtsfcin_med]
+  standard_name = surface_upward_sensible_heat_flux_over_ocean_from_mediator
+  long_name = sfc sensible heat flux input over ocean for coupling
+  units = W m-2
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (flag_for_surface_flux_coupling .and. do_mediator_atmosphere_ocean_fluxes)
+[dqsfcin_med]
+  standard_name = surface_upward_latent_heat_flux_over_ocean_from_mediator
+  long_name = sfc latent heat flux input over ocean for coupling
+  units = W m-2
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (flag_for_surface_flux_coupling .and. do_mediator_atmosphere_ocean_fluxes)
 [hsnoin_cpl]
   standard_name = lwe_surface_snow_from_coupled_process
   long_name = sfc snow depth in meters over sea ice for coupling
@@ -2416,6 +2471,22 @@
   type = real
   kind = kind_phys
   active = (flag_for_surface_flux_coupling)
+[tmf]
+  standard_name = instantaneous_tendency_of_specific_humidity_due_to_PBL
+  long_name = instantaneous_tendency_of_specific_humidity_due_to_PBL
+  units = kg kg-1 s-1
+  dimensions = (horizontal_loop_extent,vertical_layer_dimension)
+  type = real
+  kind = kind_phys
+  active = (do_prognostic_updraft_area_fraction)
+[dqdt_qmicro]
+  standard_name = instantaneous_tendency_of_specific_humidity_due_to_microphysics
+  long_name = instantaneous_tendency_of_specific_humidity_due_to_microphysics
+  units = kg kg-1 s-1
+  dimensions = (horizontal_loop_extent,vertical_layer_dimension)
+  type = real
+  kind = kind_phys
+  active = (do_prognostic_updraft_area_fraction)
 [ca_deep]
   standard_name = cellular_automata_area_fraction_for_deep_convection_from_coupled_process
   long_name = fraction of cellular automata for deep convection
@@ -2969,6 +3040,12 @@
   units = flag
   dimensions = ()
   type = logical
+[cpllnd]
+  standard_name = flag_for_land_coupling
+  long_name = flag controlling cpllnd collection (default off)
+  units = flag
+  dimensions = ()
+  type = logical
 [cpl_imp_mrg]
   standard_name = flag_for_merging_imported_data
   long_name = flag controlling cpl_imp_mrg for imported data (default off)
@@ -2990,6 +3067,12 @@
 [lsidea]
   standard_name = flag_for_integrated_dynamics_through_earths_atmosphere
   long_name = flag for idealized physics
+  units = flag
+  dimensions = ()
+  type = logical
+[use_med_flux]
+  standard_name = do_mediator_atmosphere_ocean_fluxes
+  long_name = flag for using atmosphere-ocean fluxes form mediator (default false)
   units = flag
   dimensions = ()
   type = logical
@@ -3226,6 +3309,24 @@
   units = flag
   dimensions = ()
   type = logical
+[lrseeds]
+  standard_name = do_host_provided_random_seeds
+  long_name = flag to use host-provided random seeds
+  units = flag
+  dimensions = ()
+  type = logical
+[nrstreams]
+  standard_name = number_of_host_provided_random_number_streams
+  long_name = number of host-provided random number streams
+  units = count
+  dimensions = ()
+  type = integer
+[lextop]
+  standard_name = do_extra_top_layer_for_radiation
+  long_name = use an extra top layer for radiation
+  units = flag
+  dimensions = ()
+  type = logical
 [active_gases]
   standard_name = active_gases_used_by_RRTMGP
   long_name = active gases used by RRTMGP
@@ -3365,6 +3466,24 @@
 [doGP_sgs_mynn]
   standard_name = flag_to_include_sgs_MYNN_EDMF_cloud_in_RRTMGP
   long_name = logical flag to control MYNN-EDMF PBL cloud in RRTMGP
+  units = flag
+  dimensions = ()
+  type = logical
+[rrtmgp_lw_phys_blksz]
+  standard_name = number_of_columns_per_RRTMGP_LW_block
+  long_name = number of columns to process at a time by RRTMGP LW scheme
+  units = count
+  dimensions =  ()
+  type = integer
+[rrtmgp_sw_phys_blksz]
+  standard_name = number_of_columns_per_RRTMGP_SW_block
+  long_name = number of columns to process at a time by RRTMGP SW scheme
+  units = count
+  dimensions =  ()
+  type = integer
+[doGP_smearclds]
+  standard_name = flag_for_implicit_sgs_cloud_in_RRTMGP
+  long_name = logical flag to impicit SGS cloud in RRTMGP
   units = flag
   dimensions = ()
   type = logical
@@ -3971,6 +4090,12 @@
   units = flag
   dimensions = ()
   type = logical
+[mraerosol]
+  standard_name = do_merra2_aerosol_awareness
+  long_name = flag for merra2 aerosol-aware physics for example the thompson microphysics
+  units = flag
+  dimensions = ()
+  type = logical
 [lradar]
   standard_name = flag_for_radar_reflectivity
   long_name = flag for radar reflectivity
@@ -4545,6 +4670,12 @@
   units = flag
   dimensions = ()
   type = logical
+[progsigma]
+  standard_name = do_prognostic_updraft_area_fraction
+  long_name = do_prognostic_updraft_area_fraction
+  units = flag
+  dimensions = ()
+  type = logical
 [isatmedmf]
   standard_name = choice_of_scale_aware_TKE_moist_EDMF_PBL
   long_name = choice of scale-aware TKE moist EDMF PBL scheme
@@ -4918,6 +5049,12 @@
   units = none
   dimensions = ()
   type = integer
+[tc_pbl]
+  standard_name = control_for_TC_applications_in_the_PBL_scheme
+  long_name = control for TC applications in the PBL scheme
+  units = none
+  dimensions = ()
+  type = integer
 [h0facu]
   standard_name = multiplicative_tuning_parameter_for_reduced_surface_heat_fluxes_due_to_canopy_heat_storage
   long_name = canopy heat storage factor for sensible heat flux in unstable surface layer
@@ -5068,6 +5205,66 @@
 [n_var_spp]
   standard_name = number_of_perturbed_spp_schemes
   long_name = number of perturbed spp schemes
+  units = count
+  dimensions = ()
+  type = integer
+[spp_prt_list]
+  standard_name = magnitude_of_spp_perturbations
+  long_name = magnitude of spp perturbations
+  units = 1
+  dimensions = (number_of_perturbed_spp_schemes)
+  type = real
+  kind = kind_phys
+  active = (do_stochastically_perturbed_parameterizations)
+[spp_stddev_cutoff]
+  standard_name = magnitude_of_spp_standard_deviation_cutoff
+  long_name = magnitude of spp standard deviation cutoff
+  units = 1
+  dimensions = (number_of_perturbed_spp_schemes)
+  type = real
+  kind = kind_phys
+  active = (do_stochastically_perturbed_parameterizations)
+[spp_var_list]
+  standard_name = perturbed_spp_schemes
+  long_name = perturbed spp schemes
+  units = none
+  dimensions =  (number_of_perturbed_spp_schemes)
+  type = character
+  kind = len=3
+  active = (do_stochastically_perturbed_parameterizations)
+[spp_pbl]
+  standard_name = control_for_pbl_spp_perturbations
+  long_name = control for pbl spp perturbations
+  units = count
+  dimensions = ()
+  type = integer
+[spp_sfc]
+  standard_name = control_for_surface_layer_spp_perturbations
+  long_name = control for surface layer spp perturbations
+  units = count
+  dimensions = ()
+  type = integer
+[spp_mp]
+  standard_name = control_for_microphysics_spp_perturbations
+  long_name = control for microphysics spp perturbations
+  units = count
+  dimensions = ()
+  type = integer
+[spp_rad]
+  standard_name = control_for_radiation_spp_perturbations
+  long_name = control for radiation spp perturbations
+  units = count
+  dimensions = ()
+  type = integer
+[spp_gwd]
+  standard_name = control_for_gravity_wave_drag_spp_perturbations
+  long_name = control for gravity wave drag spp perturbations
+  units = count
+  dimensions = ()
+  type = integer
+[ntrac]
+  standard_name = number_of_tracers
+  long_name = number of tracers
   units = count
   dimensions = ()
   type = integer
@@ -5419,6 +5616,12 @@
   units = index
   dimensions = ()
   type = integer
+[ntsigma]
+  standard_name = index_of_updraft_area_fraction_in_tracer_concentration_array
+  long_name = tracer index of updraft_area_fraction
+  units = index
+  dimensions = ()
+  type = integer
 [nqrimef]
   standard_name = index_of_mass_weighted_rime_factor_in_tracer_concentration_array
   long_name = tracer index for mass weighted rime factor
@@ -5476,6 +5679,96 @@
 [ntche]
   standard_name = index_for_last_chemical_tracer
   long_name = tracer index for last chemical tracer
+  units = index
+  dimensions = ()
+  type = integer
+[ntdu1]
+  standard_name = index_for_dust_bin1
+  long_name = index for dust bin1
+  units = index
+  dimensions = ()
+  type = integer
+[ntdu2]
+  standard_name = index_for_dust_bin2
+  long_name = index for dust bin2
+  units = index
+  dimensions = ()
+  type = integer
+[ntdu3]
+  standard_name = index_for_dust_bin3
+  long_name = index for dust bin3
+  units = index
+  dimensions = ()
+  type = integer
+[ntdu4]
+  standard_name = index_for_dust_bin4
+  long_name = index for dust bin4
+  units = index
+  dimensions = ()
+  type = integer
+[ntdu5]
+  standard_name = index_for_dust_bin5
+  long_name = index for dust bin5
+  units = index
+  dimensions = ()
+  type = integer
+[ntss1]
+  standard_name = index_for_seasalt_bin1
+  long_name = index for seasalt bin1
+  units = index
+  dimensions = ()
+  type = integer
+[ntss2]
+  standard_name = index_for_seasalt_bin2
+  long_name = index for seasalt bin2
+  units = index
+  dimensions = ()
+  type = integer
+[ntss3]
+  standard_name = index_for_seasalt_bin3
+  long_name = index for seasalt bin3
+  units = index
+  dimensions = ()
+  type = integer
+[ntss4]
+  standard_name = index_for_seasalt_bin4
+  long_name = index for seasalt bin4
+  units = index
+  dimensions = ()
+  type = integer
+[ntss5]
+  standard_name = index_for_seasalt_bin5
+  long_name = index for seasalt bin5
+  units = index
+  dimensions = ()
+  type = integer
+[ntsu]
+  standard_name = index_for_sulfate
+  long_name = index for sulfate
+  units = index
+  dimensions = ()
+  type = integer
+[ntbcb]
+  standard_name = index_for_bcphobic
+  long_name = index for bcphobic
+  units = index
+  dimensions = ()
+  type = integer
+[ntbcl]
+  standard_name = index_for_bcphilic
+  long_name = index for bcphilic 
+  units = index
+  dimensions = ()
+  type = integer
+[ntocb]
+  standard_name = index_for_ocphobic
+  long_name = index for ocphobic
+  units = index
+  dimensions = ()
+  type = integer
+[ntocl]
+  standard_name = index_for_ocphilic
+  long_name = index for ocphilic 
   units = index
   dimensions = ()
   type = integer
@@ -6167,6 +6460,12 @@
   units = flag
   dimensions = ()
   type = logical
+[ugwp_seq_update]
+  standard_name = do_ugwp_sequential_update
+  long_name = flag for ugwp sequential update
+  units = flag
+  dimensions = ()
+  type = logical
 [uni_cld]
   standard_name = flag_for_shoc_cloud_area_fraction_for_radiation
   long_name = flag for uni_cld
@@ -6198,19 +6497,19 @@
   dimensions = ()
   type = logical
 [do_gsl_drag_ls_bl]
-  standard_name = flag_for_gsl_drag_suite_large_scale_orographic_and_blocking_drag
-  long_name = flag to activate GSL drag suite - large-scale GWD and blocking
+  standard_name = do_gsl_drag_suite_mesoscale_orographic_and_blocking_drag
+  long_name = flag to activate GSL drag suite - mesoscale GWD and blocking
   units = flag
   dimensions = ()
   type = logical
 [do_gsl_drag_ss]
-  standard_name = flag_for_gsl_drag_suite_small_scale_orographic_drag
+  standard_name = do_gsl_drag_suite_small_scale_orographic_drag
   long_name = flag to activate GSL drag suite - small-scale GWD
   units = flag
   dimensions = ()
   type = logical
 [do_gsl_drag_tofd]
-  standard_name = flag_for_gsl_drag_suite_turbulent_orographic_form_drag
+  standard_name = do_gsl_drag_suite_turbulent_orographic_form_drag
   long_name = flag to activate GSL drag suite - turb orog form drag
   units = flag
   dimensions = ()
@@ -6497,6 +6796,13 @@
   dimensions = (horizontal_loop_extent)
   type = integer
   active = (flag_for_lw_clouds_sub_grid_approximation == 2 .or. flag_for_sw_clouds_grid_approximation == 2)
+[rseeds]
+  standard_name = random_number_seeds_from_host
+  long_name = random number seeds from host
+  units = none
+  dimensions = (horizontal_loop_extent, number_of_host_provided_random_number_streams)
+  type = integer
+  active = ((flag_for_lw_clouds_sub_grid_approximation == 2 .or. flag_for_sw_clouds_grid_approximation == 2) .and. do_host_provided_random_seeds)
 [tau_amf]
   standard_name = absolute_momentum_flux_due_to_nonorographic_gravity_wave_drag
   long_name = ngw_absolute_momentum_flux
@@ -6548,9 +6854,9 @@
   type = real
   kind = kind_phys
 [aer_nm]
-  standard_name = mass_number_concentration_of_aerosol_from_gocart_climatology
-  long_name = GOCART aerosol climatology number concentration
-  units = kg-1
+  standard_name = mass_mixing_ratio_of_aerosol_from_gocart_or_merra2
+  long_name = mass mixing ratio of aerosol from gocart or merra2
+  units = kg kg-1
   dimensions = (horizontal_loop_extent,vertical_layer_dimension,number_of_aerosol_tracers_MG)
   type = real
   kind = kind_phys
@@ -6617,7 +6923,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_surface_flux_coupling .or. flag_for_chemistry_coupling)
+  active = (flag_for_surface_flux_coupling .or. flag_for_chemistry_coupling .or. flag_for_land_coupling)
 [dsnow_cpl]
   standard_name = tendency_of_lwe_thickness_of_snowfall_amount_on_dynamics_timestep_for_coupling
   long_name = change in show_cpl (coupling_type)
@@ -6625,7 +6931,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_surface_flux_coupling .or. flag_for_chemistry_coupling)
+  active = (flag_for_surface_flux_coupling .or. flag_for_chemistry_coupling .or. flag_for_land_coupling)
 [phy_fctd]
   standard_name = atmosphere_updraft_convective_mass_flux_at_cloud_base_by_cloud_type
   long_name = cloud base mass flux for CS convection
@@ -6809,7 +7115,7 @@
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
   type = real
   kind = kind_phys
-  active = (control_for_deep_convection_scheme == identifier_for_grell_freitas_deep_convection .or. control_for_deep_convection_scheme == identifier_for_new_tiedtke_deep_convection)
+  active = (control_for_deep_convection_scheme == identifier_for_grell_freitas_deep_convection .or. control_for_deep_convection_scheme == identifier_for_new_tiedtke_deep_convection .or. control_for_deep_convection_scheme == identifer_for_scale_aware_mass_flux_deep_convection .or. control_for_shallow_convection_scheme == identifier_for_scale_aware_mass_flux_shallow_convection)
 [cactiv]
   standard_name = counter_for_grell_freitas_convection
   long_name = convective activity memory
@@ -8197,6 +8503,38 @@
   type = real
   kind = kind_phys
   active = (flag_for_unified_gravity_wave_physics_diagnostics)
+[ldu3dt_ogw]
+  standard_name = cumulative_change_in_x_wind_due_to_mesoscale_orographic_gravity_wave_drag
+  long_name = cumulative change in x wind due to mesoscale orographic gravity wave drag
+  units = m s-1
+  dimensions = (horizontal_loop_extent,vertical_layer_dimension)
+  type = real
+  kind = kind_phys
+  active = (flag_for_unified_gravity_wave_physics_diagnostics)
+[ldu3dt_obl]
+  standard_name = cumulative_change_in_x_wind_due_to_blocking_drag
+  long_name = cumulative change in x wind due to blocking drag
+  units = m s-1
+  dimensions = (horizontal_loop_extent,vertical_layer_dimension)
+  type = real
+  kind = kind_phys
+  active = (flag_for_unified_gravity_wave_physics_diagnostics)
+[ldu3dt_oss]
+  standard_name = cumulative_change_in_x_wind_due_to_small_scale_gravity_wave_drag
+  long_name = cumulative change in x wind due to small scale gravity wave drag
+  units = m s-1
+  dimensions = (horizontal_loop_extent,vertical_layer_dimension)
+  type = real
+  kind = kind_phys
+  active = (flag_for_unified_gravity_wave_physics_diagnostics)
+[ldu3dt_ofd]
+  standard_name = cumulative_change_in_x_wind_due_to_form_drag
+  long_name = cumulative change in x wind due to form drag
+  units = m s-1
+  dimensions = (horizontal_loop_extent,vertical_layer_dimension)
+  type = real
+  kind = kind_phys
+  active = (flag_for_unified_gravity_wave_physics_diagnostics)
 [du3dt_tms]
   standard_name = time_integral_of_change_in_x_wind_due_to_turbulent_orographic_form_drag
   long_name = time integral of change in x wind due to TOFD
@@ -8213,6 +8551,62 @@
   type = real
   kind = kind_phys
   active = (flag_for_unified_gravity_wave_physics_diagnostics)
+[dws3dt_ogw]
+ standard_name = cumulative_change_in_wind_speed_due_to_mesoscale_orographic_gravity_wave_drag
+ long_name = cumulative change in wind speed due to mesoscale orographic gravity wave drag
+ units = m s-1
+ dimensions = (horizontal_loop_extent,vertical_layer_dimension)
+ type = real
+ kind = kind_phys
+ active = (flag_for_unified_gravity_wave_physics_diagnostics)
+[dws3dt_obl]
+ standard_name = cumulative_change_in_wind_speed_due_to_blocking_drag
+ long_name = cumulative change in wind speed due to blocking drag
+ units = m s-1
+ dimensions = (horizontal_loop_extent,vertical_layer_dimension)
+ type = real
+ kind = kind_phys
+ active = (flag_for_unified_gravity_wave_physics_diagnostics)
+[dws3dt_oss]
+ standard_name = cumulative_change_in_wind_speed_due_to_small_scale_orographic_gravity_wave_drag
+ long_name = cumulative change in wind speed due to small scale orographic gravity wave drag
+ units = m s-1
+ dimensions = (horizontal_loop_extent,vertical_layer_dimension)
+ type = real
+ kind = kind_phys
+ active = (flag_for_unified_gravity_wave_physics_diagnostics)
+[dws3dt_ofd]
+ standard_name = cumulative_change_in_wind_speed_due_to_turbulent_orographic_form_drag
+ long_name = cumulative change in wind speed due to turbulent orographic form drag
+ units = m s-1
+ dimensions = (horizontal_loop_extent,vertical_layer_dimension)
+ type = real
+ kind = kind_phys
+ active = (flag_for_unified_gravity_wave_physics_diagnostics)
+[ldu3dt_ngw]
+ standard_name = cumulative_change_in_x_wind_due_to_convective_gravity_wave_drag
+ long_name = cumulative change in x wind due to convective gravity wave drag
+ units = m s-1
+ dimensions = (horizontal_loop_extent,vertical_layer_dimension)
+ type = real
+ kind = kind_phys
+ active = (flag_for_unified_gravity_wave_physics_diagnostics)
+[ldv3dt_ngw]
+ standard_name = cumulative_change_in_y_wind_due_to_convective_gravity_wave_drag
+ long_name = cumulative change in y wind due to convective gravity wave drag
+ units = m s-1
+ dimensions = (horizontal_loop_extent,vertical_layer_dimension)
+ type = real
+ kind = kind_phys
+ active = (flag_for_unified_gravity_wave_physics_diagnostics)
+[ldt3dt_ngw]
+ standard_name = cumulative_change_in_temperature_due_to_convective_gravity_wave_drag
+ long_name = cumulative change in temperature due to convective gravity wave drag
+ units = K
+ dimensions = (horizontal_loop_extent,vertical_layer_dimension)
+ type = real
+ kind = kind_phys
+ active = (flag_for_unified_gravity_wave_physics_diagnostics)
 [dudt_gw]
   standard_name = tendency_of_x_wind_due_to_gravity_wave_drag
   long_name = zonal wind tendency due to all GWs
@@ -8243,20 +8637,20 @@
   kind = kind_phys
 [dudt_ogw]
   standard_name = tendency_of_x_wind_due_to_mesoscale_orographic_gravity_wave_drag
-  long_name = x momentum tendency from meso scale ogw
+  long_name = x wind tendency from meso scale ogw
   units = m s-2
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
   type = real
   kind = kind_phys
-  active = (flag_for_ugwp_version_1 .or. control_for_drag_suite_gravity_wave_drag==33 .or. control_for_drag_suite_gravity_wave_drag==22)
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
 [dvdt_ogw]
   standard_name = tendency_of_y_wind_due_to_mesoscale_orographic_gravity_wave_drag
-  long_name = y momentum tendency from meso scale ogw
+  long_name = y wind tendency from meso scale ogw
   units = m s-2
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
   type = real
   kind = kind_phys
-  active = (flag_for_ugwp_version_1 .or. control_for_drag_suite_gravity_wave_drag==33 .or. control_for_drag_suite_gravity_wave_drag==22)
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
 [du_ogwcol]
   standard_name = vertically_integrated_x_momentum_flux_due_to_mesoscale_orographic_gravity_wave_drag
   long_name = integrated x momentum flux from meso scale ogw
@@ -8264,7 +8658,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_ugwp_version_1 .or. control_for_drag_suite_gravity_wave_drag==33 .or. control_for_drag_suite_gravity_wave_drag==22)
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
 [dv_ogwcol]
   standard_name = vertically_integrated_y_momentum_flux_due_to_mesoscale_orographic_gravity_wave_drag
   long_name = integrated y momentum flux from meso scale ogw
@@ -8272,23 +8666,23 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_ugwp_version_1 .or. control_for_drag_suite_gravity_wave_drag==33 .or. control_for_drag_suite_gravity_wave_drag==22)
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
 [dudt_obl]
-  standard_name = tendency_of_x_momentum_due_to_blocking_drag
-  long_name = x momentum tendency from blocking drag
+  standard_name = tendency_of_x_wind_due_to_blocking_drag
+  long_name = x wind tendency from blocking drag
   units = m s-2
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
   type = real
   kind = kind_phys
-  active = (flag_for_ugwp_version_1 .or. control_for_drag_suite_gravity_wave_drag==33 .or. control_for_drag_suite_gravity_wave_drag==22)
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
 [dvdt_obl]
-  standard_name = tendency_of_y_momentum_due_to_blocking_drag
-  long_name = y momentum tendency from blocking drag
+  standard_name = tendency_of_y_wind_due_to_blocking_drag
+  long_name = y wind tendency from blocking drag
   units = m s-2
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
   type = real
   kind = kind_phys
-  active = (flag_for_ugwp_version_1 .or. control_for_drag_suite_gravity_wave_drag==33 .or. control_for_drag_suite_gravity_wave_drag==22)
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
 [du_oblcol]
   standard_name = vertically_integrated_x_momentum_flux_due_to_blocking_drag
   long_name = integrated x momentum flux from blocking drag
@@ -8296,7 +8690,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_ugwp_version_1 .or. control_for_drag_suite_gravity_wave_drag==33 .or. control_for_drag_suite_gravity_wave_drag==22)
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
 [dv_oblcol]
   standard_name = vertically_integrated_y_momentum_flux_due_to_blocking_drag
   long_name = integrated y momentum flux from blocking drag
@@ -8304,23 +8698,87 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_ugwp_version_1 .or. control_for_drag_suite_gravity_wave_drag==33)
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
+[du3_ogwcol]
+  standard_name = cumulative_vertically_integrated_x_momentum_flux_due_to_mesoscale_orographic_gravity_wave_drag
+  long_name = cumulative integrated x momentum flux from mesoscale orographic gravity wave drag
+  units = Pa s
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
+[dv3_ogwcol]
+  standard_name = cumulative_vertically_integrated_y_momentum_flux_due_to_mesoscale_orographic_gravity_wave_drag
+  long_name = cumulative integrated y momentum flux from mesoscale orographic gravity wave drag
+  units = Pa s
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
+[du3_oblcol]
+  standard_name = cumulative_vertically_integrated_x_momentum_flux_due_to_blocking_drag
+  long_name = cumulative integrated x momentum flux from blocking drag
+  units = Pa s
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
+[dv3_oblcol]
+  standard_name = cumulative_vertically_integrated_y_momentum_flux_due_to_blocking_drag
+  long_name = cumulative integrated y momentum flux from blocking drag
+  units = Pa s
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
+[du3_osscol]
+  standard_name = cumulative_vertically_integrated_x_momentum_flux_due_to_small_scale_gravity_wave_drag
+  long_name = cumulative integrated x momentum flux from small scale gravity wave drag
+  units = Pa s
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
+[dv3_osscol]
+  standard_name = cumulative_vertically_integrated_y_momentum_flux_due_small_scale_gravity_wave_drag
+  long_name = cumulative integrated y momentum flux from small scale gravity wave drag
+  units = Pa s
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
+[du3_ofdcol]
+  standard_name = cumulative_vertically_integrated_x_momentum_flux_due_to_form_drag
+  long_name = cumulative integrated x momentum flux from form drag
+  units = Pa s
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
+[dv3_ofdcol]
+  standard_name = cumulative_vertically_integrated_y_momentum_flux_due_to_form_drag
+  long_name = cumulative integrated y momentum flux from form drag
+  units = Pa s
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
 [dudt_oss]
-  standard_name = tendency_of_x_momentum_due_to_small_scale_gravity_wave_drag
-  long_name = x momentum tendency from small scale gwd
+  standard_name = tendency_of_x_wind_due_to_small_scale_gravity_wave_drag
+  long_name = x wind tendency from small scale gwd
   units = m s-2
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
   type = real
   kind = kind_phys
-  active = (flag_for_ugwp_version_1 .or. control_for_drag_suite_gravity_wave_drag==33)
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
 [dvdt_oss]
-  standard_name = tendency_of_y_momentum_due_to_small_scale_gravity_wave_drag
-  long_name = y momentum tendency from small scale gwd
+  standard_name = tendency_of_y_wind_due_to_small_scale_gravity_wave_drag
+  long_name = y wind tendency from small scale gwd
   units = m s-2
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
   type = real
   kind = kind_phys
-  active = (flag_for_ugwp_version_1 .or. control_for_drag_suite_gravity_wave_drag==33)
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
 [du_osscol]
   standard_name = vertically_integrated_x_momentum_flux_due_to_small_scale_gravity_wave_drag
   long_name = integrated x momentum flux from small scale gwd
@@ -8328,7 +8786,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_ugwp_version_1 .or. control_for_drag_suite_gravity_wave_drag==33)
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
 [dv_osscol]
   standard_name = vertically_integrated_y_momentum_flux_due_to_small_scale_gravity_wave_drag
   long_name = integrated y momentum flux from small scale gwd
@@ -8336,23 +8794,23 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_ugwp_version_1 .or. control_for_drag_suite_gravity_wave_drag==33)
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
 [dudt_ofd]
-  standard_name = tendency_of_x_momentum_due_to_form_drag
-  long_name = x momentum tendency from form drag
+  standard_name = tendency_of_x_wind_due_to_form_drag
+  long_name = x wind tendency from form drag
   units = m s-2
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
   type = real
   kind = kind_phys
-  active = (flag_for_ugwp_version_1 .or. control_for_drag_suite_gravity_wave_drag==33)
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
 [dvdt_ofd]
-  standard_name = tendency_of_y_momentum_due_to_form_drag
-  long_name = y momentum tendency from form drag
+  standard_name = tendency_of_y_wind_due_to_form_drag
+  long_name = y wind tendency from form drag
   units = m s-2
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
   type = real
   kind = kind_phys
-  active = (flag_for_ugwp_version_1 .or. control_for_drag_suite_gravity_wave_drag==33)
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
 [du_ofdcol]
   standard_name = vertically_integrated_x_momentum_flux_due_to_form_drag
   long_name = integrated x momentum flux from form drag
@@ -8360,7 +8818,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_ugwp_version_1 .or. control_for_drag_suite_gravity_wave_drag==33)
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
 [dv_ofdcol]
   standard_name = vertically_integrated_y_momentum_flux_due_to_form_drag
   long_name = integrated y momentum flux from form drag
@@ -8368,7 +8826,7 @@
   dimensions = (horizontal_loop_extent)
   type = real
   kind = kind_phys
-  active = (flag_for_ugwp_version_1 .or. control_for_drag_suite_gravity_wave_drag==33)
+  active = (flag_for_ugwp_version_1 .or. flag_for_unified_gravity_wave_physics_diagnostics)
 [dv3dt_ngw]
   standard_name = time_integral_of_change_in_y_wind_due_to_nonstationary_gravity_wave
   long_name = time integral of change in y wind due to NGW
@@ -8553,7 +9011,7 @@
 [LTP]
   standard_name = extra_top_layer
   long_name = extra top layer for radiation
-  units = none
+  units = count
   dimensions = ()
   type = integer
 [con_cliq]

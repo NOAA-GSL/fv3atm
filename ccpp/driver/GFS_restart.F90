@@ -147,8 +147,13 @@ module GFS_restart
     if (Model%do_mynnedmf) then
       Restart%num3d = Restart%num3d + 9
     endif
+    ! RRFS Smoke
     if (Model%rrfs_sd) then
       Restart%num3d = Restart%num3d + 6
+    endif
+    !Prognostic area fraction
+    if (Model%progsigma) then
+       Restart%num3d = Restart%num3d + 2
     endif
 
     if (Model%num_dfi_radar > 0) then
@@ -472,6 +477,20 @@ module GFS_restart
        num = Model%ntot3d
     endif
 
+    !Prognostic closure
+    if(Model%progsigma)then
+       num = num + 1
+       Restart%name3d(num) = 'sas_3d_qgrs_dsave'
+      do nb = 1,nblks
+        Restart%data(nb,num)%var3p => Tbd(nb)%prevsq(:,:)
+      enddo
+      num = num + 1
+      Restart%name3d(num) = 'sas_3d_dqdt_qmicro'
+      do nb = 1,nblks
+        Restart%data(nb,num)%var3p => Coupling(nb)%dqdt_qmicro(:,:)
+      enddo
+    endif
+
     !--Convection variable used in CB cloud fraction. Presently this
     !--is only needed in sgscloud_radpre for imfdeepcnv == imfdeepcnv_gf.
     if (Model%imfdeepcnv == Model%imfdeepcnv_gf) then
@@ -481,6 +500,7 @@ module GFS_restart
         Restart%data(nb,num)%var3p => Tbd(nb)%ud_mf(:,:)
       enddo
     endif
+
     !--- RAP/HRRR-specific variables, 3D
     ! GF
     if (Model%imfdeepcnv == Model%imfdeepcnv_gf) then

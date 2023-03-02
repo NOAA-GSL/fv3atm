@@ -26,7 +26,7 @@ module module_cplfields
   !  l : model levels (3D)
   !  s : surface (2D)
   !  t : tracers (4D)
-  integer,          public, parameter :: NexportFields = 111
+  integer,          public, parameter :: NexportFields = 119
   type(ESMF_Field), target, public    :: exportFields(NexportFields)
 
   type(FieldInfo), dimension(NexportFields), public, parameter :: exportFieldsInfo = [ &
@@ -116,6 +116,14 @@ module module_cplfields
     FieldInfo("leaf_area_index                          ", "s"), &
     FieldInfo("temperature_of_soil_layer                ", "g"), &
     FieldInfo("height                                   ", "s"), &
+    FieldInfo("inst_zonal_wind_height_lowest_from_phys  ", "s"), &
+    FieldInfo("inst_merid_wind_height_lowest_from_phys  ", "s"), &
+    FieldInfo("inst_pres_height_lowest_from_phys        ", "s"), &
+    FieldInfo("inst_spec_humid_height_lowest_from_phys  ", "s"), &
+    FieldInfo("mean_prec_rate_conv                      ", "s"), &
+    FieldInfo("inst_temp_height_lowest_from_phys        ", "s"), &
+    FieldInfo("inst_exner_function_height_lowest        ", "s"), &
+    FieldInfo("surface_friction_velocity                ", "s"), &
 
 
     !  For JEDI
@@ -148,7 +156,7 @@ module module_cplfields
     FieldInfo("t2m                                      ", "s") ]
 
 ! Import Fields ----------------------------------------
-  integer,          public, parameter :: NimportFields = 43
+  integer,          public, parameter :: NimportFields = 48
   logical,          public            :: importFieldsValid(NimportFields)
   type(ESMF_Field), target, public    :: importFields(NimportFields)
 
@@ -171,6 +179,13 @@ module module_cplfields
     FieldInfo("inst_ice_vis_dir_albedo                  ", "s"), &
     FieldInfo("wave_z0_roughness_length                 ", "s"), &
     FieldInfo("inst_tracer_diag_aod                     ", "s"), &
+
+    ! For receiving fluxes from mediator
+    FieldInfo("stress_on_air_ocn_zonal                  ", "s"), &
+    FieldInfo("stress_on_air_ocn_merid                  ", "s"), &
+    FieldInfo("mean_laten_heat_flx_atm_into_ocn         ", "s"), &
+    FieldInfo("mean_sensi_heat_flx_atm_into_ocn         ", "s"), &
+    FieldInfo("mean_up_lw_flx_ocn                       ", "s"), &
 
     !  For JEDI
     ! dynamics
