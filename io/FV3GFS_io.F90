@@ -62,10 +62,11 @@ module FV3GFS_io_mod
   character(len=32)  :: fn_phy    = 'phy_data.nc'
   character(len=32)  :: fn_dust12m= 'dust12m_data.nc'
   character(len=32)  :: fn_emi    = 'emi_data.nc'
+  character(len=32)  :: fn_aod    = 'aod.nc'
   character(len=32)  :: fn_gbbepx = 'SMOKE_GBBEPx_data.nc'
 
   !--- GFDL FMS netcdf restart data types defined in fms2_io
-  type(FmsNetcdfDomainFile_t) :: Oro_restart, Sfc_restart, Phy_restart, dust12m_restart, emi_restart, gbbepx_restart
+  type(FmsNetcdfDomainFile_t) :: Oro_restart, Sfc_restart, Phy_restart, dust12m_restart, emi_restart, aod_restart, gbbepx_restart
   type(FmsNetcdfDomainFile_t) :: Oro_ls_restart, Oro_ss_restart
 
   !--- GFDL FMS restart containers
@@ -74,10 +75,11 @@ module FV3GFS_io_mod
   character(len=32),    allocatable,         dimension(:)       :: oro_ls_ss_name
   real(kind=kind_phys), allocatable, target, dimension(:,:,:)   :: oro_ls_var, oro_ss_var
   real(kind=kind_phys), allocatable, target, dimension(:,:,:,:) :: sfc_var3, phy_var3
-  character(len=32),    allocatable,         dimension(:)       :: dust12m_name, emi_name, gbbepx_name
+  character(len=32),    allocatable,         dimension(:)       :: dust12m_name, emi_name, aod_name, gbbepx_name
   real(kind=kind_phys), allocatable, target, dimension(:,:,:,:) :: gbbepx_var
   real(kind=kind_phys), allocatable, target, dimension(:,:,:,:) :: dust12m_var
   real(kind=kind_phys), allocatable, target, dimension(:,:,:)   :: emi_var
+  real(kind=kind_phys), allocatable, target, dimension(:,:,:)   :: aod_var
   !--- Noah MP restart containers
   real(kind=kind_phys), allocatable, target, dimension(:,:,:,:) :: sfc_var3sn,sfc_var3eq,sfc_var3zn
 
@@ -522,7 +524,7 @@ module FV3GFS_io_mod
     integer :: nvar_o2, nvar_s2m, nvar_s2o, nvar_s3
     integer :: nvar_oro_ls_ss
     integer :: nvar_s2r, nvar_s2mp, nvar_s3mp, isnow
-    integer :: nvar_emi, nvar_dust12m, nvar_gbbepx
+    integer :: nvar_emi, nvar_aod, nvar_dust12m, nvar_gbbepx
     real(kind=kind_phys), pointer, dimension(:,:)   :: var2_p  => NULL()
     real(kind=kind_phys), pointer, dimension(:,:,:) :: var3_p  => NULL()
     real(kind=kind_phys), pointer, dimension(:,:,:) :: var3_p1 => NULL()
@@ -551,6 +553,7 @@ module FV3GFS_io_mod
       nvar_gbbepx  = 0
       nvar_emi     = 0
     endif
+    nvar_aod     = 1
 
     if (Model%lsm == Model%lsm_ruc .and. warm_start) then
       if(Model%rdlai) then
@@ -835,6 +838,47 @@ module FV3GFS_io_mod
 
     deallocate(gbbepx_name, gbbepx_var)
     endif if_smoke  ! RRFS_Smoke
+
+    gf_aeroic: if(Model%gf_aeroic.eq.2) then  ! for chemistry analysis used in GF aerosol-aware
+    !--- open assimilated aod file
+    infile=trim(indir)//'/'//trim(fn_aod)
+    amiopen=open_file(aod_restart, trim(infile), 'read', domain=fv_domain, is_restart=.true., dont_add_res_to_filename=.true.)
+    if (.not.amiopen) call mpp_error( FATAL, 'Error with opening file'//trim(infile) )
+
+    if (.not. allocated(aod_name)) then
+     !--- allocate the various containers needed for DA AOD data
+      allocate(aod_name(nvar_aod))
+      allocate(aod_var(nx,ny,nvar_aod))
+
+      aod_name(1)  = 'aod'
+      !--- register axis
+      call register_axis( aod_restart, "x", 'X' )
+      call register_axis( aod_restart, "y", 'Y' )
+      !--- register the 2D fields
+      do num = 1,nvar_aod
+        var2_p => aod_var(:,:,num)
+        call register_restart_field(aod_restart, aod_name(num), var2_p, dimensions=(/'y','x'/))
+      enddo
+      nullify(var2_p)
+    endif
+
+    !--- read new GSL created aod restart/data
+    call mpp_error(NOTE,'reading aod information from INPUT/aod_data.tile*.nc')
+    call read_restart(aod_restart)
+    call close_file(aod_restart)
+
+    do nb = 1, Atm_block%nblks
+      !--- 2D variables
+      do ix = 1, Atm_block%blksz(nb)
+        i = Atm_block%index(nb)%ii(ix) - isc + 1
+        j = Atm_block%index(nb)%jj(ix) - jsc + 1
+        Sfcprop(nb)%aod_in(ix)  = aod_var(i,j,1)
+      enddo
+    enddo
+
+    !--- deallocate containers and free restart container
+    deallocate(aod_name, aod_var)
+    endif gf_aeroic ! chemistry analysis used in GF aerosol-aware
 
     !--- Modify/read-in additional orographic static fields for GSL drag suite
     if (Model%gwd_opt==3 .or. Model%gwd_opt==33 .or. &

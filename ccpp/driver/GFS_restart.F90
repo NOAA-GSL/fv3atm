@@ -99,7 +99,7 @@ module GFS_restart
 
     ! GF
     if (Model%imfdeepcnv == Model%imfdeepcnv_gf) then
-      Restart%num2d = Restart%num2d + 3
+      Restart%num2d = Restart%num2d + 4
     endif
     ! CA
     if (Model%imfdeepcnv == 2 .and. Model%do_ca) then
@@ -132,13 +132,9 @@ module GFS_restart
     if(Model%lrefres) then
        Restart%num3d = Model%ntot3d+1
     endif
-    ! General Convection
-    if (Model%imfdeepcnv == Model%imfdeepcnv_gf) then
-      Restart%num3d = Restart%num3d + 1
-    endif
     ! GF
-    if (Model%imfdeepcnv == 3) then
-      Restart%num3d = Restart%num3d + 3
+    if (Model%imfdeepcnv == Model%imfdeepcnv_gf) then
+      Restart%num3d = Restart%num3d + 8
     endif
     ! MYNN PBL
     if (Model%do_mynnedmf) then
@@ -233,6 +229,11 @@ module GFS_restart
       Restart%name2d(num) = 'aod_gf'
       do nb = 1,nblks
         Restart%data(nb,num)%var2p => Tbd(nb)%aod_gf(:)
+      enddo
+      num = num + 1
+      Restart%name2d(num) = 'aod_in'
+      do nb = 1,nblks
+        Restart%data(nb,num)%var2p => Sfcprop(nb)%aod_in(:)
       enddo
     endif
     ! NoahMP
@@ -437,18 +438,17 @@ module GFS_restart
        num = Model%ntot3d
     endif
 
-    !--Convection variable used in CB cloud fraction. Presently this
-    !--is only needed in sgscloud_radpre for imfdeepcnv == imfdeepcnv_gf.
+    ! GF
     if (Model%imfdeepcnv == Model%imfdeepcnv_gf) then
+      !--Convection variable used in CB cloud fraction. Presently this
+      !--is only needed in sgscloud_radpre for imfdeepcnv == imfdeepcnv_gf.
       num = num + 1
       Restart%name3d(num) = 'cnv_3d_ud_mf'
       do nb = 1,nblks
         Restart%data(nb,num)%var3p => Tbd(nb)%ud_mf(:,:)
       enddo
-    endif
-    !--- RAP/HRRR-specific variables, 3D
-    ! GF
-    if (Model%imfdeepcnv == Model%imfdeepcnv_gf) then
+
+      !--- RAP/HRRR-specific variables, 3D
       num = num + 1
       Restart%name3d(num) = 'gf_3d_prevst'
       do nb = 1,nblks
@@ -463,6 +463,26 @@ module GFS_restart
       Restart%name3d(num) = 'gf_3d_qci_conv'
       do nb = 1,nblks
         Restart%data(nb,num)%var3p => Coupling(nb)%qci_conv(:,:)
+      enddo
+      num = num + 1
+      Restart%name3d(num) = 'gf_ud_mf_accum'
+      do nb = 1,nblks
+        Restart%data(nb,num)%var3p => Tbd(nb)%ud_mf_accum(:,:)
+      enddo
+      num = num + 1
+      Restart%name3d(num) = 'gf_ud_mf_timeave'
+      do nb = 1,nblks
+        Restart%data(nb,num)%var3p => Tbd(nb)%ud_mf_timeave(:,:)
+      enddo
+      num = num + 1
+      Restart%name3d(num) = 'gf_qci_conv_accum'
+      do nb = 1,nblks
+        Restart%data(nb,num)%var3p => Coupling(nb)%qci_conv_accum(:,:)
+      enddo
+      num = num + 1
+      Restart%name3d(num) = 'qci_conv_timeave'
+      do nb = 1,nblks
+        Restart%data(nb,num)%var3p => Coupling(nb)%qci_conv_timeave(:,:)
       enddo
     endif
     ! MYNN PBL
